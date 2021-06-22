@@ -119,7 +119,7 @@ class GP_model(tfp.distributions.GaussianProcess):
             return kernel_diag + self.observation_noise_variance
 
 # We redefine the SchurComplement Kernel class from TF Probability to again allow for Stochastic Kriging
-# This is because the GaussianProcessRegressionModelClass uses the SchurComplement to construct the posterior covariance matrix
+# This is because the GaussianProcessRegressionModel class uses the SchurComplement to construct the posterior covariance matrix
 class CustomSchurComplement(tfk.SchurComplement):
     def __init__(self,base_kernel, fixed_inputs, diag_shift=None, validate_args=False,name='SchurComplement'):
         super().__init__(base_kernel,fixed_inputs,diag_shift,validate_args,name)
@@ -132,7 +132,7 @@ class CustomSchurComplement(tfk.SchurComplement):
             divisor_matrix = tf.linalg.set_diag(divisor_matrix, tf.linalg.diag_part(divisor_matrix) + diag_shift)
         return divisor_matrix
 
-# Subclassing of the GaussianProcessRegressionModel method in order to add functionalities such as gradient computations (i.e. compute the derivatie of the GP w.r.t one of its inputs), as well as prediction confidence bounds
+# Subclassing of the GaussianProcessRegressionModel method in order to add functionalities such as gradient computations (i.e. compute the derivative of the GP w.r.t one of its inputs), as well as prediction confidence bounds
 class GPR_model(tfp.distributions.GaussianProcessRegressionModel):
     def __init__(self,kernel,index_points = None ,observation_index_points = None ,observations = None,\
                 observation_noise_variance = 0.0,predictive_noise_variance=None, mean_fn=None,\
